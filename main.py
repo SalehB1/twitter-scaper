@@ -35,6 +35,20 @@ class Twitter:
         print('X-Guest-Token: ' + result.json()['guest_token'])
         return result.json()['guest_token']
 
+    def __login(self):
+        def step1():
+            pass
+
+        def step2():
+            pass
+
+        def step3():
+            pass
+
+        def get_challenge():
+            result = self.session.get("https://api.twitter.com/1.1/auth/complete.json")
+            return result.json()['challenge']
+
 
 if __name__ == '__main__':
     # main()
