@@ -3,6 +3,7 @@ import json
 from typing import List, Dict, Any
 from fetch import Fetcher
 from tokens import Tokens
+from urllib.parse import quote
 
 
 class Twitter(Fetcher):
@@ -33,8 +34,7 @@ class Twitter(Fetcher):
         if cursor != "":
             variables["cursor"] = cursor
 
-        url = Tokens.api_base + "graphql/L1DeQfPt7n3LtTvrBqkJ2g/TweetDetail?variables=" + \
-              requests.utils.quote(json.dumps(variables))
+        url = Tokens.api_base + "graphql/L1DeQfPt7n3LtTvrBqkJ2g/TweetDetail?variables=" + quote(json.dumps(variables))
 
         obj = fetch_fn(url, "GET")
         if obj and obj.get("errors"):
