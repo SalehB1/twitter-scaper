@@ -2,16 +2,17 @@ import requests
 import json
 from typing import List, Dict, Any
 from fetch import Fetcher
+from tokens import Tokens
 
 
 class Twitter(Fetcher):
 
-    def idToUnparsedTweets(tweetID: str, cursor: str,
-                           includeRecommendedTweets: bool = False,
-                           fetchFn: callable = defaultFetch) -> List[Dict[str, Any]]:
+    def idToUnparsedTweets(self, tweet_id: str, cursor: str,
+                           include_recommended_tweets: bool = False,
+                           fetch_fn: callable = Fetcher.default_fetch) -> List[Dict[str, Any]]:
         variables = {
-            "focalTweetId": tweetID,
-            "with_rux_injections": includeRecommendedTweets,
+            "focalTweetId": tweet_id,
+            "with_rux_injections": include_recommended_tweets,
             "includePromotedContent": False,
             "withCommunity": True,
             "withQuickPromoteEligibilityTweetFields": False,
@@ -32,15 +33,14 @@ class Twitter(Fetcher):
         if cursor != "":
             variables["cursor"] = cursor
 
-        url = apiBase + "graphql/L1DeQfPt7n3LtTvrBqkJ2g/TweetDetail?variables=" + \
+        url = Tokens.api_base + "graphql/L1DeQfPt7n3LtTvrBqkJ2g/TweetDetail?variables=" + \
               requests.utils.quote(json.dumps(variables))
 
-        guestToken = currentGuestToken() or await newGuestToken(fetchFn)
-        obj = await fetchFn(url, "GET", AUTHORIZATION, guestToken)
+        obj = fetch_fn(url, "GET")
         if obj and obj.get("errors"):
             if obj["errors"]["code"] in [215, 200]:
-                guestToken = await newGuestToken(fetchFn)
-                obj = await fetchFn(url, "GET", AUTHORIZATION, guestToken)
+                super()._get_guest_token()
+                obj = fetch_fn(url, "GET")
             else:
                 print(f"twitter get request error code: {obj['errors']['code']}")
 
