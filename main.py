@@ -1,24 +1,14 @@
 import requests
 import json
-from tokens import Tokens
-from guestToken import currentGuestToken, newGuestToken
-from constants import AUTHORIZATION, apiBase
-from defaultFetch import defaultFetch
 from typing import List, Dict, Any
+from fetch import Fetcher
 
 
-def main():
-    print("Hello World!")
-    r = requests.get("https://twitter.com")
-    print(r.status_code)
-    print(r.text)
+class Twitter(Fetcher):
 
-
-class Twitter():
-
-    async def idToUnparsedTweets(tweetID: str, cursor: str,
-                                 includeRecommendedTweets: bool = False,
-                                 fetchFn: callable = defaultFetch) -> List[Dict[str, Any]]:
+    def idToUnparsedTweets(tweetID: str, cursor: str,
+                           includeRecommendedTweets: bool = False,
+                           fetchFn: callable = defaultFetch) -> List[Dict[str, Any]]:
         variables = {
             "focalTweetId": tweetID,
             "with_rux_injections": includeRecommendedTweets,
@@ -60,9 +50,7 @@ class Twitter():
 
 
 if __name__ == '__main__':
-    # main()
-    t = Twitter()
-    # print(t.session.headers)
-    r = t.session.get("https://twitter.com")
+    twitter = Twitter()
+    r = twitter.session.get("https://twitter.com")
     print(r.json())
     print(r.text)
