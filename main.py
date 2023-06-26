@@ -95,7 +95,11 @@ class Twitter:
 
         def get_flow_token():
             url = 'https://api.twitter.com/1.1/onboarding/task.json?flow_name=login'
-            self.session.post(url, data=payload)
+            result = self.session.post(url, data=payload)
+            if result.json()['status'] == 'success':
+                self.flow_token = result.json()['flow_token']
+            else:
+                raise Exception('Failed to get flow token')
 
         def step2():
             pass
