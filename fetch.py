@@ -1,4 +1,12 @@
-class Fetcher():
+import requests
+from tokens import Tokens
+# from guestToken import currentGuestToken, newGuestToken
+# from constants import AUTHORIZATION, apiBase
+# from defaultFetch import defaultFetch
+from typing import List, Dict, Any
+
+
+class Fetcher:
     def __init__(self):
         self.session = requests.Session()
         self.session.headers.update({
@@ -96,3 +104,4 @@ class Fetcher():
         def get_challenge():
             result = self.session.get("https://api.twitter.com/1.1/auth/complete.json")
             return result.json()['challenge']
+
