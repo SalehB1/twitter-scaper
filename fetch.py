@@ -1,9 +1,9 @@
+import json
 import requests
 from tokens import Tokens
 # from guestToken import currentGuestToken, newGuestToken
 # from constants import AUTHORIZATION, apiBase
 # from defaultFetch import defaultFetch
-from typing import List, Dict, Any
 
 
 class Fetcher:
@@ -23,12 +23,12 @@ class Fetcher:
         })
         # self.session.headers.update({'x-csrf-token': Tokens.csrf_token})
         self.session.headers.update({'authorization': Tokens.Authorization})
-        self.session.headers.update({'x-guest-token': self.__get_guest_token()})
+        self.session.headers.update({'x-guest-token': self._get_guest_token()})
         self.session.headers.update({
             'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'})
         self.login_url_1 = 'https://api.twitter.com/1.1/onboarding/task.json?flow_name=login'
 
-    def __get_guest_token(self):
+    def _get_guest_token(self):
         result = self.session.post("https://api.twitter.com/1.1/guest/activate.json", data='')
         print('X-Guest-Token: ' + result.json()['guest_token'])
         return result.json()['guest_token']
