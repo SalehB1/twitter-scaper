@@ -105,3 +105,13 @@ class Fetcher:
             result = self.session.get("https://api.twitter.com/1.1/auth/complete.json")
             return result.json()['challenge']
 
+    def default_fetch(self, url, method='GET', data=None):
+        if method == 'GET':
+            result = self.session.get(url)
+        elif method == 'POST':
+            result = self.session.post(url, data=data)
+        else:
+            raise Exception('Invalid method')
+        if result.status_code != 200:
+            raise Exception('Failed to fetch')
+        return result.json()
