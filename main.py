@@ -48,6 +48,16 @@ class Twitter(Fetcher):
         tweets = obj.get("entries") or obj.get("moduleItems")
         return tweets
 
+    def get_user_info(self, user_id):
+        url = 'https://api.twitter.com/graphql/-xfUfZsnR_zqjFd-IfrN5A/UserByRestId?variables={"userId":"%s","withHighlightedLabel":true}' % user_id
+        result = self.session.get(url)
+        print(result.json())
+
+    def get_user_tweets(self, user_id):
+        url = 'https://api.twitter.com/graphql/-xfUfZsnR_zqjFd-IfrN5A/UserTweets?variables={"userId":"%s","count":20,"withHighlightedLabel":true,"withTweetQuoteCount":true,"includePromotedContent":true,"withTweetResult":false,"withReactions":false}' % user_id
+        result = self.session.get(url)
+        print(result.json())
+
 
 if __name__ == '__main__':
     twitter = Twitter()
